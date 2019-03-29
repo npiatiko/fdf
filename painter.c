@@ -1,52 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   painter.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npiatiko <npiatiko@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/29 16:55:23 by npiatiko          #+#    #+#             */
+/*   Updated: 2019/03/29 16:55:23 by npiatiko         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
-void drawLine(t_coord c)
+void	ft_painter(t_coord c, int dcolor, int error, t_map *map)
 {
-	const int deltaX = abs(c.x2 - c.x1);
-	const int deltaY = abs(c.y2 - c.yy1);
-	const int signX = c.x1 < c.x2 ? 1 : -1;
-	const int signY = c.yy1 < c.y2 ? 1 : -1;
+	int error2;
+	int sx;
+	int sy;
+
+	sx = c.x1 < c.x2 ? 1 : -1;
+	sy = c.yy1 < c.y2 ? 1 : -1;
+	while (c.x1 != c.x2 || c.yy1 != c.y2)
+	{
+		mlx_pixel_put(map->mlx_ptr, map->window_ptr, c.x1, c.yy1, c.color1);
+		c.color1 += c.color1 < c.color2 ? dcolor : -1 * dcolor;
+		error2 = error * 2;
+		if (error2 > -c.dy)
+		{
+			error -= c.dy;
+			c.x1 += sx;
+		}
+		if (error2 < c.dx)
+		{
+			error += c.dx;
+			c.yy1 += sy;
+		}
+	}
+}
+
+void	ft_bresenham(t_coord c, t_map *map)
+{
 	int dcolor;
 	int error;
 
-	error = deltaX - deltaY;
-	if (deltaX > deltaY)
-	{
-		dcolor = deltaX ? (c.color1 ^ c.color2) / deltaX : 0;
-	}
+	c.dy = abs(c.y2 - c.yy1);
+	c.dx = abs(c.x2 - c.x1);
+	error = c.dx - c.dy;
+	if (c.dx > c.dy)
+		dcolor = c.dx ? (c.color1 ^ c.color2) / c.dx : 0;
 	else
-	{
-		dcolor = deltaY ? (c.color1 ^ c.color2) / deltaY : 0;
-	}
-//	dcolor = deltaX > deltaY ? (c.color1 - c.color2) / deltaX : (c.color1 - c.color2) / deltaY;
-//	mlx_pixel_put(g_mlx_ptr, g_window_ptr, c.x1, c.yy1, c.color1);
-	while(c.x1 != c.x2 || c.yy1 != c.y2)
-	{
-		mlx_pixel_put(g_mlx_ptr, g_window_ptr, c.x1, c.yy1, c.color1);
-		c.color1 += c.color1 < c.color2 ? dcolor : -1 * dcolor;
-		const int error2 = error * 2;
-		//
-		if(error2 > -deltaY)
-		{
-			error -= deltaY;
-			c.x1 += signX;
-		}
-		if(error2 < deltaX)
-		{
-			error += deltaX;
-			c.yy1 += signY;
-		}
-	}
-	mlx_pixel_put(g_mlx_ptr, g_window_ptr, c.x2, c.y2, c.color2);
+		dcolor = c.dy ? (c.color1 ^ c.color2) / c.dy : 0;
+	mlx_pixel_put(map->mlx_ptr, map->window_ptr, c.x1, c.yy1, c.color1);
+	ft_painter(c, dcolor, error, map);
+	mlx_pixel_put(map->mlx_ptr, map->window_ptr, c.x2, c.y2, c.color2);
 }
 
-void ft_draw_map(t_map *map)
+void	ft_draw_maps(t_map *map, int i, int j)
 {
-	int		i;
-	int		j;
 	t_coord	c;
 
-	i = -1;
 	while (++i < map->sizey && (j = -1))
 		while (++j < map->sizex)
 		{
@@ -58,14 +70,22 @@ void ft_draw_map(t_map *map)
 				c.x2 = (int)(map->xvalue[i + 1][j]);
 				c.y2 = (int)(map->yvalue[i + 1][j]);
 				c.color2 = map->color[i + 1][j];
-				drawLine(c);
+				ft_bresenham(c, map);
 			}
 			if (j < map->sizex - 1)
 			{
 				c.x2 = (int)(map->xvalue[i][j + 1]);
 				c.y2 = (int)(map->yvalue[i][j + 1]);
 				c.color2 = map->color[i][j + 1];
-				drawLine(c);
+				ft_bresenham(c, map);
 			}
 		}
+}
+
+void	ft_draw_map(t_map *map)
+{
+	ft_calc_coord(map);
+	map->sizey && map->sizey == 1 ? mlx_pixel_put(map->mlx_ptr, map->window_ptr,
+		(int)map->xvalue[0][0], (int)map->yvalue[0][0], map->color[0][0]) : 0;
+	ft_draw_maps(map, -1, 0);
 }

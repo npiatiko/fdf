@@ -1,22 +1,28 @@
-#include "fdf.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npiatiko <npiatiko@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/29 16:59:16 by npiatiko          #+#    #+#             */
+/*   Updated: 2019/03/29 16:59:17 by npiatiko         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int ft_exit(char *stre, int errno)
-{
-	if (stre)
-		ft_printf("Error : %s\n", stre);
-	system("leaks -q fdf");
-	exit(errno);
-}
+#include "fdf.h"
 
 char	**ft_verify(char **data)
 {
 	int i;
 
 	i = 0;
-	ft_strchr("+-0123456789", data[0][0]) ? 0 : ft_exit("bad value of altitude.", 20);
+	ft_strchr("+-0123456789", data[0][0]) ? 0 :
+	ft_exit("bad value of altitude.", 20);
 	while (data[0][++i])
 	{
-		ft_strchr("0123456789", data[0][i]) ? 0 : ft_exit("bad value of altitude.", 20);
+		ft_strchr("0123456789", data[0][i]) ? 0 :
+		ft_exit("bad value of altitude.", 20);
 	}
 	i = 1;
 	if (data[1])
@@ -24,15 +30,16 @@ char	**ft_verify(char **data)
 		ft_strncmp(data[1], "0x", 2) ? ft_exit("bad value of color.", 25) : 0;
 		ft_strlen(data[1] + 2) > 6 ? ft_exit("bad value of color.", 25) : 0;
 		while (data[1][++i])
-			ft_strchr("0123456789ABCDEFabcdef", data[1][i]) ? 0 : ft_exit("bad value of color.", 20);
+			ft_strchr("0123456789ABCDEFabcdef", data[1][i]) ? 0 :
+			ft_exit("bad value of color.", 20);
 	}
 	return (data);
 }
 
-t_input *ft_newinput(char *line)
+t_input	*ft_newinput(char *line)
 {
 	t_input	*new;
-	int 	i;
+	int		i;
 	char	**tmp;
 
 	i = -1;
@@ -56,26 +63,24 @@ t_input *ft_newinput(char *line)
 	return (new);
 }
 
-void 	ft_input_pushback(t_input **head, t_input *new)
+void	ft_input_pushback(t_input **head, t_input *new)
 {
-	t_input *tmp;
+	t_input	*tmp;
 
 	tmp = *head;
 	if (!*head)
 		*head = new;
 	else
 	{
+		if (new->len != (*head)->len)
+			ft_exit("invalid format file. Different lengths of lines.", 10);
 		while (tmp->next)
-		{
-			if (new->len != tmp->len)
-				ft_exit("invalid format file. Different lengths of lines.", 10);
 			tmp = tmp->next;
-		}
 		tmp->next = new;
 	}
 }
 
-void ft_coord(t_map *map, t_input *input)
+void	ft_coord(t_map *map, t_input *input)
 {
 	int i;
 	int	j;
@@ -101,11 +106,11 @@ void ft_coord(t_map *map, t_input *input)
 	}
 }
 
-t_map *ft_parser(char *fname)
+t_map	*ft_parser(char *fname)
 {
-	int		fd;
-	char	*line;
-	t_map	*map;
+	int				fd;
+	char			*line;
+	t_map			*map;
 	static t_input	*input = NULL;
 
 	map = (t_map *)ft_memalloc(sizeof(t_map));

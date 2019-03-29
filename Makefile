@@ -16,7 +16,10 @@ INCLS = -I $(MLX_HEAD) -I $(LIB_HEAD)
 SRCS =	main.c \
 		parser.c \
 		painter.c \
-		atoi_hex.c
+		aux_fns.c \
+		rotate.c \
+		deal.c \
+		projections.c
 
 OBJS_D = ./objs
 OBJS = $(addprefix $(OBJS_D)/, $(SRCS:.c=.o))
