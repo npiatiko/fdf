@@ -93,7 +93,6 @@ void ft_multiple_mtrx(double **mtrx, t_map *map)
 		{
 			map->basematrix[i][j] = tmp[i][0] * mtrx[0][j]
 				+ tmp[i][1] * mtrx[1][j] + tmp[i][2] * mtrx[2][j];
-//			map->basematrix[i][j] *= map->params->scale;
 		}
 	}
 	ft_delmtrx(mtrx);
@@ -130,11 +129,11 @@ void ft_calc_coord(t_map *map)
 		j = -1;
 		while (++j < map->sizex)
 		{
-			(map->xvalue)[i][j] = (map->basematrix[0][0] * (j) + map->basematrix[0][1]
-		 * (i) + map->basematrix[0][2] * map->altitude[i][j]);
+			(map->xvalue)[i][j] = (map->basematrix[0][0] * (j - map->sizex / 2) + map->basematrix[0][1]
+		 * (i - map->sizey / 2) + map->basematrix[0][2] * map->altitude[i][j]);
 			(map->xvalue)[i][j] += map->params->xshift;
-			(map->yvalue)[i][j] =(map->basematrix[1][0] * (j) + map->basematrix[1][1]
-		 * (i) + map->basematrix[1][2] * map->altitude[i][j]);
+			(map->yvalue)[i][j] =(map->basematrix[1][0] * (j - map->sizex / 2) + map->basematrix[1][1]
+		 * (i - map->sizey / 2) + map->basematrix[1][2] * map->altitude[i][j]);
 			(map->yvalue)[i][j] += map->params->yshift;
 		}
 	}
