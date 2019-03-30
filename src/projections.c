@@ -14,7 +14,6 @@
 
 void	ft_iso(t_map *map)
 {
-	map->params->scale = 1;
 	map->params->xshift = 750;
 	map->params->yshift = 500;
 	map->params->anglex = 30;
@@ -38,7 +37,6 @@ void	ft_reset(t_map *map)
 
 void	ft_front(t_map *map)
 {
-	map->params->scale = 1;
 	map->params->xshift = 750;
 	map->params->yshift = 500;
 	map->params->anglex = 90;

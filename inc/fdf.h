@@ -12,10 +12,14 @@
 
 #ifndef FDF_H
 # define FDF_H
-# include "./libft/includes/libft.h"
+# define FDF_PTR map->mlx_ptr, map->window_ptr
+# define MPR ft_exit(strerror(errno), errno)
+# define MAL ft_memalloc
+# include "libft.h"
 # include <mlx.h>
 # include <limits.h>
 # include <math.h>
+# include <errno.h>
 
 typedef struct	s_map
 {
@@ -68,7 +72,7 @@ void			ft_draw_map(t_map *map);
 void			ft_calc_coord(t_map *map);
 void			ft_bresenham(t_coord c, t_map *map);
 void			ft_delmtrx(double **mtrx);
-int				ft_exit(char *stre, int errno);
+int				ft_exit(char *stre, int errn);
 int				ft_deal_key(int key, t_map *map);
 int				ft_deal_mouse(int key, int x, int y, t_map *map);
 int				ft_atoi_hex(const char *str);

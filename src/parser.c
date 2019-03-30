@@ -43,19 +43,19 @@ t_input	*ft_newinput(char *line)
 	char	**tmp;
 
 	i = -1;
-	new = (t_input *)ft_memalloc(sizeof(t_input));
-	new->line = ft_strsplit(line, ' ');
+	(new = (t_input *)ft_memalloc(sizeof(t_input))) ? 0 : MPR;
+	(new->line = ft_strsplit(line, ' ')) ? 0 : MPR;
 	while ((new->line)[new->len])
 	{
 		if (!ft_strchr("+-0123456789", (new->line)[new->len][0]))
 			ft_exit("bad value of altitude.", 20);
 		new->len++;
 	}
-	new->altitude = (char **)ft_memalloc(sizeof(char *) * new->len);
-	new->color = (char **)ft_memalloc(sizeof(char *) * new->len);
+	(new->altitude = (char **)ft_memalloc(sizeof(char *) * new->len)) ? 0 : MPR;
+	(new->color = (char **)ft_memalloc(sizeof(char *) * new->len)) ? 0 : MPR;
 	while (++i < new->len)
 	{
-		tmp = ft_verify(ft_strsplit((new->line)[i], ','));
+		(tmp = ft_verify(ft_strsplit((new->line)[i], ','))) ? 0 : MPR;
 		new->altitude[i] = tmp[0];
 		new->color[i] = tmp[1] ? tmp[1] : ft_strdup("0xffffff");
 		free(tmp);
@@ -86,17 +86,17 @@ void	ft_coord(t_map *map, t_input *input)
 	int	j;
 
 	i = -1;
-	map->altitude = (int **)ft_memalloc(sizeof(int *) * map->sizey);
-	map->color = (int **)ft_memalloc(sizeof(int *) * map->sizey);
-	map->xvalue = (double **)ft_memalloc(sizeof(double *) * map->sizey);
-	map->yvalue = (double **)ft_memalloc(sizeof(double *) * map->sizey);
+	(map->altitude = (int **)MAL(sizeof(int *) * map->sizey)) ? 0 : MPR;
+	(map->color = (int **)MAL(sizeof(int *) * map->sizey)) ? 0 : MPR;
+	(map->xvalue = (double **)MAL(sizeof(double *) * map->sizey)) ? 0 : MPR;
+	(map->yvalue = (double **)MAL(sizeof(double *) * map->sizey)) ? 0 : MPR;
 	while (++i < map->sizey)
 	{
 		j = -1;
-		map->altitude[i] = (int *)ft_memalloc(sizeof(int) * map->sizex);
-		map->color[i] = (int *)ft_memalloc(sizeof(int) * map->sizex);
-		(map->xvalue)[i] = (double *)ft_memalloc(sizeof(double) * map->sizex);
-		(map->yvalue)[i] = (double *)ft_memalloc(sizeof(double) * map->sizex);
+		(map->altitude[i] = (int *)MAL(sizeof(int) * map->sizex)) ? 0 : MPR;
+		(map->color[i] = (int *)MAL(sizeof(int) * map->sizex)) ? 0 : MPR;
+		(map->xvalue[i] = (double *)MAL(sizeof(double) * map->sizex)) ? 0 : MPR;
+		(map->yvalue[i] = (double *)MAL(sizeof(double) * map->sizex)) ? 0 : MPR;
 		while (++j < map->sizex)
 		{
 			map->color[i][j] = ft_atoi_hex((input->color)[j] + 2);
@@ -116,7 +116,7 @@ t_map	*ft_parser(char *fname)
 	map = (t_map *)ft_memalloc(sizeof(t_map));
 	map->sizex = -1;
 	if ((fd = open(fname, O_RDONLY)) <= 0)
-		ft_exit("bad filename.", 20);
+		ft_exit(strerror(errno), errno);
 	read(fd, NULL, 0) < 0 ? ft_exit("is dir.", 21) : 0;
 	while (get_next_line(fd, &line) > 0)
 	{

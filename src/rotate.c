@@ -46,9 +46,13 @@ double	**ft_rotmx(int angle, char c)
 	int		i;
 
 	i = -1;
-	mtrx = (double **)ft_memalloc(sizeof(double *) * 3);
+	(mtrx = (double **)ft_memalloc(sizeof(double *) * 3)) ?
+	0 : ft_exit(strerror(errno), errno);
 	while (++i < 3)
-		mtrx[i] = (double *)ft_memalloc(sizeof(double) * 3);
+	{
+		(mtrx[i] = (double *)ft_memalloc(sizeof(double) * 3)) ?
+		0 : ft_exit(strerror(errno), errno);
+	}
 	ft_init_rotmtrx(mtrx, angle, c);
 	return (mtrx);
 }
@@ -59,10 +63,12 @@ void	ft_calc_mtrx(t_map *map)
 	int		i;
 
 	i = -1;
-	scaler = (double **)ft_memalloc(sizeof(double *) * 3);
+	(scaler = (double **)ft_memalloc(sizeof(double *) * 3)) ?
+	0 : ft_exit(strerror(errno), errno);
 	while (++i < 3)
 	{
-		scaler[i] = (double *)ft_memalloc(sizeof(double) * 3);
+		(scaler[i] = (double *)ft_memalloc(sizeof(double) * 3)) ?
+		0 : ft_exit(strerror(errno), errno);
 		scaler[i][i] = map->params->scale;
 	}
 	ft_multiple_mtrx(ft_rotmx(map->params->anglex, 'x'), map);

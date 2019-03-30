@@ -14,14 +14,15 @@
 
 void	ft_menu(t_map *map)
 {
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 50, 0xffffff, "Scroll - rotate");
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 70, 0xffffff, "I - isometric");
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 90, 0xffffff, "F - frontal");
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 110, 0xffffff, "+ , - scale");
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 130, 0xffffff, "A S D W - shift image");
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 150, 0xffffff, "R - reset");
-	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 170, 0xffffff, "M - hide MENU");
-//	mlx_string_put(map->mlx_ptr, map->window_ptr, 50, 190, 0xffffff, "MENU");
+	mlx_string_put(FDF_PTR, 50, 50, 0xffffff, "Scroll - rotate");
+	mlx_string_put(FDF_PTR, 50, 70, 0xffffff, "I - isometric");
+	mlx_string_put(FDF_PTR, 50, 90, 0xffffff, "F - frontal");
+	mlx_string_put(FDF_PTR, 50, 110, 0xffffff, "\"+\", \"-\" - scale");
+	mlx_string_put(FDF_PTR, 50, 130, 0xffffff, "A S D W - shift image");
+	mlx_string_put(FDF_PTR, 50, 150, 0xffffff, "R - reset");
+	mlx_string_put(FDF_PTR, 50, 170, 0xffffff, "M - hide MENU");
+	mlx_string_put(FDF_PTR, 50, 190, 0xffffff, "Z X - rotate");
+	mlx_string_put(FDF_PTR, 50, 210, 0xffffff, "\"esc\" - to exit");
 }
 
 int		ft_deal_key(int key, t_map *map)
@@ -34,6 +35,8 @@ int		ft_deal_key(int key, t_map *map)
 	key == 13 ? map->params->yshift -= 20 : 0;
 	key == 0 ? map->params->xshift -= 20 : 0;
 	key == 2 ? map->params->xshift += 20 : 0;
+	key == 6 ? map->params->anglez += 10 : 0;
+	key == 7 ? map->params->anglez -= 20 : 0;
 	key == 15 ? ft_reset(map) : 0;
 	key == 34 ? ft_iso(map) : 0;
 	key == 3 ? ft_front(map) : 0;
