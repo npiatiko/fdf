@@ -30,10 +30,10 @@ OBJ = $(SRCS:.c=.o)
 libft:
 	@make -C./libft
 
-$(NAME): $(OBJ) libft/libft.a inc/fdf.h
+$(NAME): $(OBJ) libft/libft.a
 	gcc -o $(NAME) $(OBJ) $(FLAGS2) ./libft/libft.a -I ./inc
 
-%.o: %.c $(INC)
+%.o: %.c $(INC) inc/fdf.h
 	gcc -o $@ -c $< $(FLAGS1) -I ./inc -I ./libft/includes
 
 clean:
